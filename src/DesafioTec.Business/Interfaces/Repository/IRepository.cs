@@ -10,13 +10,11 @@ namespace DesafioTec.Business.Interfaces.Repository
 {
     public interface IRepository<TEntity> : IDisposable where TEntity : class
     {
-        IUnitOfWork UnitOfWork { get; }
         Task Adicionar(TEntity entity);
         Task<TEntity?> ObterPorId(int id);
         Task<List<TEntity>> ObterTodos();
         Task Atualizar(TEntity entity);
         Task Remover(int id);
         Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate); //LAMBDA EXPRESSION
-        Task<int> SaveChanges();
     }
 }

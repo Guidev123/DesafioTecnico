@@ -20,9 +20,20 @@ namespace DesafioTec.Data
         public DbSet<Pedido> Pedidos { get; set; } = null!;
 
 
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
         public async Task<bool> Commit()
         {
             return await base.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> Rollback()
+        {
+            return await Task.FromResult(true);
         }
     }
 }

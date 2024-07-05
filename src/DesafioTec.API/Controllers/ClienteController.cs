@@ -2,6 +2,7 @@
 using DesafioTec.API.DTO;
 using DesafioTec.Business.Entities;
 using DesafioTec.Business.Interfaces;
+using DesafioTec.Business.Interfaces.Persistence;
 using DesafioTec.Business.Interfaces.Repository;
 using DesafioTec.Business.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +14,18 @@ namespace DesafioTec.API.Controllers
     {
         private readonly IClienteRepository _clienteRepository;
         private readonly IClienteService _clienteService;
+        private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
         public ClienteController(IClienteRepository clienteRepository,
                                  IMapper mapper,
                                  IClienteService clienteService,
-                                 INotificador notificador) : base(notificador)
+                                 INotificador notificador,
+                                 IUnitOfWork uow) : base(notificador)
         {
             _clienteRepository = clienteRepository;
             _mapper = mapper;
             _clienteService = clienteService;
+            _uow = uow;
         }
 
         [HttpGet]
@@ -42,6 +46,7 @@ namespace DesafioTec.API.Controllers
             await _clienteService.Adicionar(cliente);
             
             if(!OperacaoValida()) return CustomResponse(cliente);
+            if (!await _uow.Commit()) return CustomResponse(clienteDTO);
 
             return Ok(cliente);
         }
@@ -59,6 +64,9 @@ namespace DesafioTec.API.Controllers
 
             await _clienteService.Atualizar(_mapper.Map<Cliente>(clienteDTO));
 
+            if (!OperacaoValida()) return CustomResponse(clienteDTO);
+            if (!await _uow.Commit()) return CustomResponse(clienteDTO);
+
             return CustomResponse(clienteDTO);
         }
 
@@ -70,6 +78,8 @@ namespace DesafioTec.API.Controllers
             if (cliente == null) return NotFound();
 
             await _clienteService.Remover(id);
+
+            if (!await _uow.Commit()) return CustomResponse(cliente);
 
             return CustomResponse(cliente);
         }

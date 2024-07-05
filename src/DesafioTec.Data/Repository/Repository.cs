@@ -20,8 +20,6 @@ namespace DesafioTec.Data.Repository
             DbSet = db.Set<TEntity>();
         }
 
-        public IUnitOfWork UnitOfWork => Db;
-
         public async Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate)
         {
             return await DbSet.AsNoTracking().Where(predicate).ToListAsync();
@@ -37,23 +35,15 @@ namespace DesafioTec.Data.Repository
         public async Task Adicionar(TEntity entity)
         {
             DbSet.Add(entity);
-            await SaveChanges();
         }
         public async Task Atualizar(TEntity entity)
         {
             DbSet.Update(entity);
-            await SaveChanges();
         }
         public async Task Remover(int id)
         {
             var entity = await DbSet.FindAsync(id);
             DbSet.Remove(entity);
-            await SaveChanges();
-        }
-
-        public async Task<int> SaveChanges()
-        {
-            return await Db.SaveChangesAsync();
         }
         public void Dispose()
         {

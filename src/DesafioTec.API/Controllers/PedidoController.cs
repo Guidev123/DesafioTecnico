@@ -2,6 +2,7 @@
 using DesafioTec.API.DTO;
 using DesafioTec.Business.Entities;
 using DesafioTec.Business.Interfaces;
+using DesafioTec.Business.Interfaces.Persistence;
 using DesafioTec.Business.Interfaces.Repository;
 using DesafioTec.Business.Interfaces.Services;
 using DesafioTec.Business.Services;
@@ -15,14 +16,16 @@ namespace DesafioTec.API.Controllers
     {
         private readonly IPedidoRepository _pedidoRepository;
         private readonly IPedidoService _pedidoService;
+        private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
         public PedidoController(IPedidoRepository pedidoRepository,
                                  IMapper mapper,
-                                 IPedidoService pedidoService, INotificador notificador) : base(notificador)
+                                 IPedidoService pedidoService, INotificador notificador, IUnitOfWork uow) : base(notificador)
         {
             _pedidoRepository = pedidoRepository;
             _mapper = mapper;
             _pedidoService = pedidoService;
+            _uow = uow;
         }
 
 
@@ -34,7 +37,7 @@ namespace DesafioTec.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("obter-pedidos-cliente/{id:int}")]
         public async Task<ActionResult> ObterTodosPedidosPorCliente(int id)
         {
             var result = _mapper.Map<IEnumerable<PedidoDTO>>(await _pedidoRepository.ObterPedidosPorCliente(id));
@@ -50,6 +53,7 @@ namespace DesafioTec.API.Controllers
             await _pedidoService.Adicionar(pedido);
 
             if (!OperacaoValida()) return CustomResponse(pedido);
+            if (!await _uow.Commit()) return CustomResponse(pedido);
 
             return Ok(pedido);
         }
@@ -67,6 +71,9 @@ namespace DesafioTec.API.Controllers
 
             await _pedidoService.Atualizar(_mapper.Map<Pedido>(pedidoDTO));
 
+            if (!OperacaoValida()) return CustomResponse(pedidoDTO);
+            if (!await _uow.Commit()) return CustomResponse(pedidoDTO);
+
             return CustomResponse(pedidoDTO);
         }
 
@@ -78,6 +85,7 @@ namespace DesafioTec.API.Controllers
             if (pedido == null) return NotFound();
 
             await _pedidoService.Remover(id);
+            if (!await _uow.Commit()) return CustomResponse(pedido);
 
             return CustomResponse(pedido);
         }

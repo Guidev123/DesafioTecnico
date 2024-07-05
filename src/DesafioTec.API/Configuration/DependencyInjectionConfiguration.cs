@@ -5,6 +5,7 @@ using DesafioTec.Business.Notificacoes;
 using DesafioTec.Business.Services;
 using DesafioTec.Data.Repository;
 using DesafioTec.Data;
+using DesafioTec.Business.Interfaces.Persistence;
 
 namespace DesafioTec.API.Configuration
 {
@@ -16,6 +17,8 @@ namespace DesafioTec.API.Configuration
             builder.Services.AddScoped<DesafioTecDb>();
             builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
             builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
             //NOTIFICACOES
             builder.Services.AddScoped<INotificador, Notificador>();
