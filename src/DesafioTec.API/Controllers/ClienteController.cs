@@ -32,17 +32,46 @@ namespace DesafioTec.API.Controllers
             return Ok(result);
         }
 
+
         [HttpPost]
         public async Task<ActionResult> CriarCliente(ClienteDTO clienteDTO)
         {
-            if(!ModelState.IsValid) return BadRequest();
+            if(!ModelState.IsValid) return CustomResponse(ModelState);
 
             var cliente = _mapper.Map<Cliente>(clienteDTO);
             await _clienteService.Adicionar(cliente);
             
-            if(!OperacaoValida()) return BadRequest();
+            if(!OperacaoValida()) return CustomResponse(cliente);
 
             return Ok(cliente);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> EditarCliente(int id, ClienteDTO clienteDTO)
+        {
+            if (id != clienteDTO.ClienteId)
+            {
+                NotificarErro("O id informado é diferente do que foi passado na query");
+                return CustomResponse(clienteDTO);
+            }
+
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            await _clienteService.Atualizar(_mapper.Map<Cliente>(clienteDTO));
+
+            return CustomResponse(clienteDTO);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<ClienteDTO>> ExcluirCliente(int id)
+        {
+            var cliente = await _clienteRepository.ObterPorId(id);
+
+            if (cliente == null) return NotFound();
+
+            await _clienteService.Remover(id);
+
+            return CustomResponse(cliente);
         }
     }
 }
