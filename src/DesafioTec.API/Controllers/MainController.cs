@@ -16,7 +16,6 @@ namespace DesafioTec.API.Controllers
         }
 
 
-
         protected ActionResult CustomResponse(object result = null)
         {
             if (OperacaoValida())
@@ -33,22 +32,6 @@ namespace DesafioTec.API.Controllers
                 success = false,
                 errors = _notificador.ObterNotificacoes().Select(n => n.Menssagem)
             });
-        }
-
-        protected ActionResult CustomResponse(ModelStateDictionary modelState)
-        {
-            if (!modelState.IsValid) NotificarErroModelInvalida(modelState);
-            return CustomResponse();
-        }
-
-        protected void NotificarErroModelInvalida(ModelStateDictionary modelState)
-        {
-            var erros = modelState.Values.SelectMany(e => e.Errors);
-            foreach (var erro in erros)
-            {
-                var errorMsg = erro.Exception == null ? erro.ErrorMessage : erro.Exception.Message;
-                NotificarErro(errorMsg);
-            }
         }
 
         protected bool OperacaoValida()

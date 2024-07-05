@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
+using DesafioTec.API.DTO;
+using DesafioTec.Business.Entities;
 using DesafioTec.Business.Interfaces;
 using DesafioTec.Business.Interfaces.Repository;
 using DesafioTec.Business.Interfaces.Services;
+using DesafioTec.Business.Services;
+using DesafioTec.Data.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioTec.API.Controllers
@@ -19,6 +23,63 @@ namespace DesafioTec.API.Controllers
             _pedidoRepository = pedidoRepository;
             _mapper = mapper;
             _pedidoService = pedidoService;
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> ObterTodosPedidos()
+        {
+            var result = _mapper.Map<IEnumerable<PedidoDTO>>(await _pedidoRepository.ObterTodos());
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult> ObterTodosPedidosPorCliente(int id)
+        {
+            var result = _mapper.Map<IEnumerable<PedidoDTO>>(await _pedidoRepository.ObterPedidosPorCliente(id));
+
+            return Ok(result);
+        }
+        [HttpPost]
+        public async Task<ActionResult> CriarPedido(PedidoDTO pedidoDTO)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var pedido = _mapper.Map<Pedido>(pedidoDTO);
+            await _pedidoService.Adicionar(pedido);
+
+            if (!OperacaoValida()) return CustomResponse(pedido);
+
+            return Ok(pedido);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> EditarPedido(int id, PedidoDTO pedidoDTO)
+        {
+            if (id != pedidoDTO.PedidoId)
+            {
+                NotificarErro("O id informado é diferente do que foi passado na query");
+                return CustomResponse(pedidoDTO);
+            }
+
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            await _pedidoService.Atualizar(_mapper.Map<Pedido>(pedidoDTO));
+
+            return CustomResponse(pedidoDTO);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<PedidoDTO>> ExcluirPedido(int id)
+        {
+            var pedido = await _pedidoRepository.ObterPorId(id);
+
+            if (pedido == null) return NotFound();
+
+            await _pedidoService.Remover(id);
+
+            return CustomResponse(pedido);
         }
     }
 }
