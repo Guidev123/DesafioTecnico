@@ -78,7 +78,7 @@ https://www.youtube.com/watch?v=L-eUqI1-JvY
             <li><strong>Data:</strong> Contém os repositórios e a configuração do DbContext. </li>
         </ul>
         
-  ![Screenshot_15](https://github.com/Guidev123/DesafioTecnico/assets/155389912/b436383b-5c5a-457e-be1d-293fb2403d49)
+![ArquiteturaSistema](https://github.com/Guidev123/DesafioTecnico/assets/155389912/ecaaa402-fbf7-4e20-a619-664ed586cd3f)
 
 
 <br>
