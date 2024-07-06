@@ -26,7 +26,30 @@
             <li>Padronização de responses. </li>
         </ol>
         
+<h1>Video demonstração da API 💻</h1>
 
+https://www.youtube.com/watch?v=L-eUqI1-JvY
+        
+<h2>Endpoints da API 🔍</h2>
+        
+<h3>Clientes</h3>
+        <ul>
+            <li>GET <code>/api/clientes</code>: Obtém todos os clientes</li>
+            <li>POST <code>/api/clientes</code>: Cria um cliente</li>
+            <li>GET <code>/api/clientes/{id}</code>: Obtém um cliente por ClienteId</li>
+            <li>PUT <code>/api/clientes/{id}</code>: Atualiza as informações de um cliente com base em um ClienteId</li>
+            <li>DELETE <code>/api/clientes/{id}</code>: Exclui um cliente por ClienteId</li>
+            <li>POST <code>/api/clientes/criar-cliente-pedido</code>: Cria um cliente e pedidos associados a ele</li>
+        </ul>
+
+<h3>Pedidos</h3>
+        <ul>
+            <li>GET <code>/api/pedidos</code>: Obtém todos os pedidos</li>
+            <li>POST <code>/api/pedidos</code>: Cria um pedido associado a um ClienteId</li>
+            <li>GET <code>/api/pedidos/obter-pedidos-cliente/{id}</code>: Obtém todos os pedidos de um cliente com base em um ClienteId</li>
+            <li>PUT <code>/api/pedidos/{id}</code>: Edita um pedido com base em um PedidoId</li>
+            <li>DELETE <code>/api/pedidos/{id}</code>: Exclui um pedido com base em um PedidoId</li>
+        </ul>
         
   <h2>Tecnologias Utilizadas 🛠️</h2>
         <ul>
@@ -57,12 +80,6 @@
         
   ![Screenshot_15](https://github.com/Guidev123/DesafioTecnico/assets/155389912/b436383b-5c5a-457e-be1d-293fb2403d49)
 
-        
-  <h2>Demo da API 💻</h2>
-
-https://github.com/Guidev123/DesafioTecnico/assets/155389912/6476921a-68e6-4714-a069-595ea43da94c
-
-https://github.com/Guidev123/DesafioTecnico/assets/155389912/6fa11115-aa00-4722-8922-67b24f627bc6
 
 <br>
 <br>
