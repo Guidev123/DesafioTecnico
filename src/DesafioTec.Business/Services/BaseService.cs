@@ -28,7 +28,7 @@ namespace DesafioTec.Business.Services
         }
         protected void Notificar(string menssagemErro)
         {
-            _notificador.ArmazenaNotificacao(new Notificacao(menssagemErro));
+            _notificador.AdicionarNotificacao(new Notificacao(menssagemErro));
         }
 
         protected bool ValidarEntidade<TValidation, TEntity>(TValidation validacao, TEntity entidade) where TValidation : AbstractValidator<TEntity>

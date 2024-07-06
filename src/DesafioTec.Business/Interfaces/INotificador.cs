@@ -11,6 +11,6 @@ namespace DesafioTec.Business.Interfaces
     {
         bool PossuiNotificacao();
         List<Notificacao> ObterNotificacoes();
-        void ArmazenaNotificacao(Notificacao notificacao);
+        void AdicionarNotificacao(Notificacao notificacao);
     }
 }

@@ -41,7 +41,7 @@ namespace DesafioTec.API.Controllers
 
         protected void NotificarErro(string mensagem)
         {
-            _notificador.ArmazenaNotificacao(new Notificacao(mensagem));
+            _notificador.AdicionarNotificacao(new Notificacao(mensagem));
         }
     }
 }

@@ -11,7 +11,7 @@ namespace DesafioTec.Business.Notificacoes
             _notificacoes = new List<Notificacao>();
         }
 
-        public void ArmazenaNotificacao(Notificacao notificacao)
+        public void AdicionarNotificacao(Notificacao notificacao)
         {
             _notificacoes.Add(notificacao);
         }
