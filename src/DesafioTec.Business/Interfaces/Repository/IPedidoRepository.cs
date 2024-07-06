@@ -10,5 +10,6 @@ namespace DesafioTec.Business.Interfaces.Repository
     public interface IPedidoRepository : IRepository<Pedido>
     {
         Task<IEnumerable<Pedido>> ObterPedidosPorCliente(int clienteId); // RETORNA TODOS OS PEDIDOS DE UM CLIENTE
+        Task RemoverPorCliente(int id);
     }
 }

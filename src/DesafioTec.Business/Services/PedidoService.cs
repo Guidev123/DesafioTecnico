@@ -40,6 +40,10 @@ namespace DesafioTec.Business.Services
         {
             await _pedidoRepository.Remover(id);    
         }
+        public async Task RemoverPorCliente(int id)
+        {
+            await _pedidoRepository.RemoverPorCliente(id);
+        }
         public async void Dispose()
         {
             _pedidoRepository?.Dispose();

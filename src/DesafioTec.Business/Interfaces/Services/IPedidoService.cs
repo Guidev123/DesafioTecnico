@@ -12,5 +12,6 @@ namespace DesafioTec.Business.Interfaces.Services
         Task Adicionar(Pedido pedido);
         Task Atualizar(Pedido pedido);
         Task Remover(int id);
+        Task RemoverPorCliente(int id);
     }
 }

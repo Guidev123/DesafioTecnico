@@ -10,6 +10,11 @@ namespace DesafioTec.API.Configuration
         {
             CreateMap<Cliente, ClienteDTO>().ReverseMap();
             CreateMap<Pedido, PedidoDTO>().ReverseMap();
+            CreateMap<ClientePedidoDTO, ClienteDTO>().ReverseMap();
+
+            CreateMap<ClientePedidoDTO, Cliente>();
+            CreateMap<ClientePedidoDTO, Pedido>();
+
         }
     }
 }

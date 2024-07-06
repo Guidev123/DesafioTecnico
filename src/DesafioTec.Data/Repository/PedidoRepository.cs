@@ -12,5 +12,12 @@ namespace DesafioTec.Data.Repository
         {
             return await Buscar(p => p.ClienteId == clienteId);
         }
+
+        public async Task RemoverPorCliente(int id)
+        {
+
+            var entity = DbSet.Where(c=> c.ClienteId == id).ToList();
+            DbSet.RemoveRange(entity);
+        }
     }
 }
