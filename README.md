@@ -39,7 +39,7 @@ https://www.youtube.com/watch?v=87--sOey8ZI
             <li>GET <code>/api/clientes/{id}</code>: Obtém um cliente por ClienteId</li>
             <li>PUT <code>/api/clientes/{id}</code>: Atualiza as informações de um cliente com base em um ClienteId</li>
             <li>DELETE <code>/api/clientes/{id}</code>: Exclui um cliente por ClienteId</li>
-            <li>POST <code>/api/clientes/criar-cliente-pedido</code>: Cria um cliente e pedidos associados a ele</li>
+            <li>POST <code>/api/clientes/criar-cliente-pedido</code>: Cria um cliente e pedidos associados a ele na mesma operação</li>
         </ul>
 
 <h3>Pedidos</h3>
