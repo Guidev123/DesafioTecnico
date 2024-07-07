@@ -14,7 +14,7 @@
             <li>Um controlador API que recebe os dados do cliente e pedido e chama o serviço para realizar a inserção </li>
         </ol>
         <h2>Implementações Adicionais ✅</h2>
-        <p>Além das exigências anteriores, também foram implementadas:</p>
+        <p>Além das exigências anteriores, também foram implementadas algumas novas features e Design Patterns para escalabilidade do projeto</p>
         <ol>
             <li>Validações de entidades com FluentValidation. </li>
             <li>Mapeamento das entidades para DTOs utilizando o AutoMapper. </li>
