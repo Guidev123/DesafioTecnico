@@ -28,7 +28,7 @@
         
 <h1>Video demonstração da API 💻</h1>
 
-https://www.youtube.com/watch?v=L-eUqI1-JvY
+https://www.youtube.com/watch?v=87--sOey8ZI
         
 <h2>Endpoints da API 🔍</h2>
         
@@ -78,7 +78,8 @@ https://www.youtube.com/watch?v=L-eUqI1-JvY
             <li><strong>Data:</strong> Contém os repositórios e a configuração do DbContext. </li>
         </ul>
         
-![ArquiteturaSistema](https://github.com/Guidev123/DesafioTecnico/assets/155389912/ecaaa402-fbf7-4e20-a619-664ed586cd3f)
+
+![arch](https://github.com/Guidev123/DesafioTecnico/assets/155389912/fd86e69b-41fd-489c-9bb4-5643fb19d702)
 
 
 <br>
