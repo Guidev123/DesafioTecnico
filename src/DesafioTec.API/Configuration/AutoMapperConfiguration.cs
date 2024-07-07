@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DesafioTec.API.DTO;
+using DesafioTec.API.Request;
 using DesafioTec.Business.Entities;
 
 namespace DesafioTec.API.Configuration
@@ -8,12 +9,20 @@ namespace DesafioTec.API.Configuration
     {
         public AutoMapperConfiguration()
         {
-            CreateMap<Cliente, ClienteDTO>().ReverseMap();
-            CreateMap<Pedido, PedidoDTO>().ReverseMap();
-            CreateMap<ClientePedidoDTO, ClienteDTO>().ReverseMap();
+            // CLIENTES 
 
-            CreateMap<ClientePedidoDTO, Cliente>(); // MAPEANDO EXPLICITAMENTE
-            CreateMap<ClientePedidoDTO, Pedido>(); // MAPEANDO EXPLICITAMENTE
+            CreateMap<Cliente, ClienteDTO>().ReverseMap();
+            CreateMap<Cliente, ClienteRequest>().ReverseMap();
+
+
+            //CLIENTES PEDIDOS
+            CreateMap<Cliente, ClientePedidoDTO>().ReverseMap();
+
+
+            // PEDIDOS
+
+            CreateMap<Pedido, PedidoDTO>().ReverseMap();
+            CreateMap<Pedido, PedidoRequest>().ReverseMap();
 
         }
     }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DesafioTec.API.DTO;
+using DesafioTec.API.Request;
 using DesafioTec.Business.Entities;
 using DesafioTec.Business.Interfaces;
 using DesafioTec.Business.Interfaces.Persistence;
@@ -32,34 +33,53 @@ namespace DesafioTec.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ClienteDTO>))]
         public async Task<ActionResult> ObterTodosClientes()
         {
             var result = _mapper.Map<IEnumerable<ClienteDTO>>(await _clienteRepository.ObterTodos());
 
-            return Ok(result);
+            return CustomResponse(result);
         }
+
+
         [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClienteDTO))]
         public async Task<ActionResult> ObterClientePorId(int id)
         {
-            var result = await _clienteRepository.ObterPorId(id);
+            var result = _mapper.Map<ClienteDTO>(await _clienteRepository.ObterPorId(id));
+            
+            if (result == null)
+            {
+                NotificarErro("Cliente inexistente");
+                return CustomResponse();
+            }
 
-            return Ok(result);
+            return CustomResponse(result);
         }
 
+
         [HttpPost]
-        public async Task<ActionResult> CriarCliente(ClienteDTO clienteDTO)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ClienteDTO))]
+        public async Task<ActionResult> CriarCliente(ClienteRequest clienteRequest)
         {
             if(!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var cliente = _mapper.Map<Cliente>(clienteDTO);
+            var cliente = _mapper.Map<Cliente>(clienteRequest);
             await _clienteService.Adicionar(cliente);
-            
-            if(!OperacaoValida()) return CustomResponse(cliente);
-            if (!await _uow.Commit()) return CustomResponse(clienteDTO);
 
-            return Ok(cliente);
+
+            if (!OperacaoValida()) return CustomResponse();
+            if (!await _uow.Commit()) return CustomResponse(clienteRequest);
+
+            var result = _mapper.Map<ClienteDTO>(cliente);
+            result.ClienteId = cliente.ClienteId;
+
+            return CustomResponse(result);
         }
+
+
         [HttpPost("criar-cliente-pedido")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ClientePedidoDTO))]
         public async Task<ActionResult> CriarClientePedido(ClientePedidoDTO clienteDTO)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -70,18 +90,15 @@ namespace DesafioTec.API.Controllers
             if (!OperacaoValida()) return CustomResponse(cliente);
             if (!await _uow.Commit()) return CustomResponse(clienteDTO);
 
-            return Ok(cliente);
+            return CustomResponse(cliente);
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> EditarCliente(int id, ClienteDTO clienteDTO)
-        {
-            if (id != clienteDTO.ClienteId)
-            {
-                NotificarErro("O id informado é diferente do que foi passado na query");
-                return CustomResponse(clienteDTO);
-            }
 
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClienteDTO))]
+        public async Task<ActionResult> EditarCliente(int id, ClienteRequest clienteDTO)
+        {
+            clienteDTO.ClienteId = id;
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             await _clienteService.Atualizar(_mapper.Map<Cliente>(clienteDTO));
@@ -92,7 +109,10 @@ namespace DesafioTec.API.Controllers
             return CustomResponse(clienteDTO);
         }
 
+
+
         [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClienteDTO))]
         public async Task<ActionResult<ClienteDTO>> ExcluirClientePedido(int id)
         {
             var cliente = await _clienteRepository.ObterPorId(id);

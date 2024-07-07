@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DesafioTec.API.DTO;
+using DesafioTec.API.Request;
 using DesafioTec.Business.Entities;
 using DesafioTec.Business.Interfaces;
 using DesafioTec.Business.Interfaces.Persistence;
@@ -30,54 +31,68 @@ namespace DesafioTec.API.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PedidoDTO))]
         public async Task<ActionResult> ObterTodosPedidos()
         {
             var result = _mapper.Map<IEnumerable<PedidoDTO>>(await _pedidoRepository.ObterTodos());
 
-            return Ok(result);
+            return CustomResponse(result);
         }
 
+
         [HttpGet("obter-pedidos-cliente/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PedidoDTO))]
         public async Task<ActionResult> ObterTodosPedidosPorCliente(int id)
         {
             var result = _mapper.Map<IEnumerable<PedidoDTO>>(await _pedidoRepository.ObterPedidosPorCliente(id));
 
-            return Ok(result);
+            return CustomResponse(result);
         }
+
+
         [HttpPost]
-        public async Task<ActionResult> CriarPedido(PedidoDTO pedidoDTO)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PedidoDTO))]
+        public async Task<ActionResult> CriarPedido(PedidoRequest pedidoRequest)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var pedido = _mapper.Map<Pedido>(pedidoDTO);
+            var pedido = _mapper.Map<Pedido>(pedidoRequest);
             await _pedidoService.Adicionar(pedido);
+
 
             if (!OperacaoValida()) return CustomResponse(pedido);
             if (!await _uow.Commit()) return CustomResponse(pedido);
 
-            return Ok(pedido);
+            var result = _mapper.Map<PedidoDTO>(pedido);
+            result.PedidoId = pedido.PedidoId;
+
+            return CustomResponse(result);
         }
+
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> EditarPedido(int id, PedidoDTO pedidoDTO)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PedidoDTO))]
+        public async Task<ActionResult> EditarPedido(int id, PedidoRequest pedidoRequest)
         {
-            if (id != pedidoDTO.PedidoId)
-            {
-                NotificarErro("O id informado é diferente do que foi passado na query");
-                return CustomResponse(pedidoDTO);
-            }
-
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            await _pedidoService.Atualizar(_mapper.Map<Pedido>(pedidoDTO));
+            pedidoRequest.PedidoId = id;
+            var pedido = _mapper.Map<Pedido>(pedidoRequest);
+            await _pedidoService.Atualizar(pedido);
 
-            if (!OperacaoValida()) return CustomResponse(pedidoDTO);
-            if (!await _uow.Commit()) return CustomResponse(pedidoDTO);
 
-            return CustomResponse(pedidoDTO);
+            if (!OperacaoValida()) return CustomResponse(pedidoRequest);
+            if (!await _uow.Commit()) return CustomResponse(pedidoRequest);
+
+            var result = _mapper.Map<PedidoDTO>(pedido);
+            result.ClienteId = pedido.ClienteId;
+
+            return CustomResponse(pedidoRequest);
         }
 
+
         [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PedidoDTO))]
         public async Task<ActionResult<PedidoDTO>> ExcluirPedido(int id)
         {
             var pedido = await _pedidoRepository.ObterPorId(id);

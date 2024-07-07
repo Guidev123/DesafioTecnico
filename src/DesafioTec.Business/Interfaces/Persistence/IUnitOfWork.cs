@@ -9,5 +9,6 @@ namespace DesafioTec.Business.Interfaces.Persistence
     public interface IUnitOfWork
     {
         Task<bool> Commit();
+        Task<bool> Rollback();
     }
 }
