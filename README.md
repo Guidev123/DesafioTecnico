@@ -67,7 +67,7 @@ https://www.youtube.com/watch?v=87--sOey8ZI
   <h2>Princípios e Design Patterns 📖</h2>
         <ul>
             <li>Implementação de Repository e UnitOfWork </li>
-            <li>SOLID e Clean Code </li>
+            <li>Utilização de alguns principios de codificação como: Domain Driven Design, SOLID e Clean Code </li>
         </ul>
         
   <h2>Arquitetura ✏️</h2>
